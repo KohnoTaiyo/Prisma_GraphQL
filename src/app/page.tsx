@@ -1,7 +1,12 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import Image from "next/image";
+import styles from "./page.module.css";
+import { PrismaClient, notes } from "@prisma/client";
 
-export default function Home() {
+export default async function Home() {
+  const prisma = new PrismaClient();
+  const notes: notes[] = await prisma.notes.findMany();
+  console.log({ notes });
+
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -15,7 +20,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{' '}
+            By{" "}
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
@@ -91,5 +96,5 @@ export default function Home() {
         </a>
       </div>
     </main>
-  )
+  );
 }
