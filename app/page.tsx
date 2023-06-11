@@ -2,18 +2,23 @@
 
 import Image from "next/image";
 import styles from "./page.module.css";
-import { PrismaClient, User } from "@prisma/client";
-import React from "react";
+import { User } from "@prisma/client";
+import React, { useEffect, useState } from "react";
+import { PrismaClient } from "@prisma/client";
+
+async function getData() {
+  const prisma = new PrismaClient();
+  const notes = await prisma.user.findMany();
+  return notes;
+}
 
 export default async function Home() {
-  const prisma = new PrismaClient();
-  const notes: User[] = await prisma.user.findMany();
-  console.log(notes);
+  const data = await getData();
 
   return (
     <main className={styles.main}>
       <div className={styles.description}>
-        {notes.map((n) => (
+        {data?.map((n) => (
           <React.Fragment key={n.id}>
             <p key={n.id}>{n.id}</p>
             <p key={n.id}>{n.email}</p>
